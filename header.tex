@@ -1,0 +1,84 @@
+\documentclass[oneside,a4paper]{article}
+
+\usepackage{parskip}
+\usepackage{subfigure}
+% \usepackage{geometry}
+\usepackage{amsmath}
+\usepackage[dvipdfm]{graphicx} 
+\usepackage{amsthm,amssymb}
+\usepackage{tikz}
+\usepackage{fontspec,xltxtra,xunicode}
+
+
+\usepackage{fancyvrb}
+% \usepackage{fancybox}
+\usepackage{listings}
+\lstset{numbers=left, 
+  numberstyle=\scriptsize,
+  frame=single,
+  flexiblecolumns=false,
+  language=,
+  texcl=true,
+  escapechar=\%,
+  basicstyle=\ttfamily\small, 
+  breaklines=true,
+  extendedchars=true,
+  showstringspaces=false,
+  keywordstyle=\bfseries}
+
+% \usepackage{indentfirst} 
+
+
+\usepackage{pstricks} 
+\usepackage[dvipdfm,a4paper,
+hyperindex=true,
+backref=section,
+bookmarks=true,
+bookmarksnumbered=true,
+pdfpagemode=UseOutlines,
+pdffitwindow=true,
+linkbordercolor=white, % 链接边框设置为白色
+citebordercolor=white, % 链接边框设置为白色
+urlbordercolor=white]{hyperref}
+          
+
+% \DefineShortVerb{\|}
+
+\usepackage[CJKtextspaces,CJKmathspaces,CJKchecksingle]{xeCJK}
+\setCJKmainfont[BoldFont={Adobe Heiti Std}, ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+\setCJKmonofont{Adobe Fangsong Std}
+\xeCJKsetcharclass{"0}{"2E7F}{0}
+\xeCJKsetcharclass{"2E80}{"FFFF}{1}
+
+\setmainfont[Mapping=tex-text]{Linux Libertine O}
+\setsansfont[Mapping=tex-text]{Linux Biolinum O} 
+\setmonofont{Courier 10 Pitch} 
+\punctstyle{quanjiao} 
+
+
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\renewcommand{\lstlistingname}{程序清单}
+
+\newenvironment{solve}{%
+  \settowidth{\leftskip}{\textit{解:}\ }%
+  \makebox[0pt][r]{\textit{解:}\ }%
+  \ignorespaces}{\qed\par\ignorespacesafterend}
+
+\author{\textsc{Computer Science} 0813\\谢松 U200814454}
+\title{\doctitle}
+\hypersetup{
+  pdftitle={\doctitle},
+  pdfauthor={谢松},
+  pdfsubject={\doctitle}}
+\usepackage{booktabs}
+
+\begin{document}
+
+
+\maketitle
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

@@ -1,0 +1,215 @@
+\newcommand{\doctitle}{计算机系统结构第一次作业}
+\input{../header}
+
+\section{Ex 1.7}
+
+某台主频为 400 MHz 的计算机执行标准测试程序，程序中指令类型、执行数量
+和平均时钟周期如表~\ref{tab:1-7}:
+
+\begin{table}[!h]
+  \caption{标准测试程序指令统计}
+  \label{tab:1-7}
+  \centering
+  \begin{tabular}{ccc}
+    \toprule
+    指令类型 & 指令执行数量(条) & 平均时钟周期数 \\
+    \midrule
+    整数 & 45000 & 1 \\
+    数据传送 & 75000 & 2 \\
+    浮点 & 8000 & 4\\
+    分支 & 1500 & 2\\\bottomrule
+  \end{tabular}
+\end{table}
+
+求该计算机的有效CPI、MIPS和程序执行时间。
+
+\begin{solve}
+指令总数： $S_I = 45000 + 75000 + 8000 + 1500 = 129500$，4种指令的比例分
+别为 $35\%$、$58\%$、$6\%$、$1\%$。
+
+有效CPI：
+\begin{align*}
+  \mathrm{CPI}_e &= 1\times{}35\% + 2\times{}58 + 4\times{}6 +
+  2\times{}1\\
+  &= 1.77
+\end{align*}
+
+MIPS:
+\begin{align*}
+  \mathrm{MIPS} &= \mathrm{Freq} \div \mathrm{CPI}_e = 400 \div
+  1.77 \\
+  &= 226.0
+\end{align*}
+
+程序执行时间：
+\begin{align*}
+  t &= S_I \times{} \mathrm{CPI}_e \div \mathrm{Freq} =
+  129500 \times 1.77 \div (400\times{}10^6)\\
+  &= 5.73 \times 10^{-4}
+\end{align*}
+\end{solve}
+
+\section{Ex 1.9}
+
+将计算机系统中的某一功能的处理速度加快20倍，但该功能的处理时间仅占整个
+系统运行时间的40\%，则采用该改进方法后，能使整个系统的性能提高多少？
+
+\begin{solve}
+  系统性能提高比例:
+  \begin{align*}
+    S &= \frac{1}{1 - 40\% + 40\% \div 20} \\
+      &= 1.61
+  \end{align*}
+\end{solve}
+
+\section{Ex 1.10}
+
+计算机系统有3个部件可以改进，这3个部件的加速比如下：
+
+\begin{tabular*}{1.0\linewidth}{ccc}
+  部件加速比$S_1 = 30$; & 部件加速比$S_2 = 20$; & 部件加速比$S_3=10$;
+\end{tabular*}
+
+\begin{enumerate}
+\item 如果部件1和部件2的可改进比例都为30\%，那么当部件3的可改进比例为
+  多少时，系统的加速比才可到达10？
+\item 如果3个部件的可改进比例分别为30\%、30\%和20\%，3个部件同时改进，
+  那么系统中不可改进部分的执行时间在总执行时间中占的比例是多少？
+\end{enumerate}
+
+\begin{solve}
+  \begin{enumerate}
+  \item 根据Amdahl定理
+    \begin{equation}
+      S = \frac{1}{(1-\sum{f_i}) + \sum{(f_i/S_i)}},
+    \end{equation}
+    其中，$f_i$为部件$i$在未优化系统中所占的比例，$S_i$为部件$i$的加速
+    比；可得方程：
+    \begin{equation}
+      10 = \frac{1}{(1-30\%-30\%-f_3) + (30\%/30) + (30\%/20) + (f_3 / 10) }.
+    \end{equation}
+    解之，得$f_3 = 0.36$。
+  \item 系统中不可改进的部分的比例：
+    \begin{align*}
+      f_u &= 1-30\%-30\%-20\%\\ &= 20\%.
+    \end{align*}
+    则系统中不可改进部分的执行时间占总执行时间的比例：
+    \begin{align*}
+      \eta &= \frac{f_u}{(1-\sum{f_i}) + \sum{(f_i/S_i)}}\\
+      &= 81.6\%
+    \end{align*}
+  \end{enumerate}
+\end{solve}
+
+\section{Ex 1.11}
+
+假设浮点数指令 FP 的比例为 30\%，其中浮点数平方根 FPSQR 占全部指令的比
+例为4\%，FP操作的CPI为5，FPSQR的CPI为20，其他指令的平均CPI为1.25，现有
+两种改进方案，第一种是把FPSQR操作的CPI减至3，第二种是把所有的FP操作的
+CPI减至3，试比较两种方案对系统性能的提高程度。
+
+\begin{solve}
+  改进前，系统的有效CPI：
+  \begin{align*}
+    \mathrm{CPI}_e &= 5 \times 30\% + 1.25 \times 70\%\\
+                   &= 2.375
+  \end{align*}
+  
+  方案一，将FPSQR操作的CPI减至3，有效CPI:
+  \begin{align*}
+    \mathrm{CPI}_1 &= 3 \times 4\% + 5 \times 26\% + 1.25 \times 70\%\\
+                   &= 2.295
+  \end{align*}
+  
+  系统性能的提高程度：\[
+    E_1 = \frac{\mathrm{CPI}_e}{\mathrm{CPI}_1}
+       = 1.03\]
+
+  方案二，将所有FP操作的CPI减至3，系统的有效CPI：
+  \begin{align*}
+    \mathrm{CPI}_2 &= 3 \times 30\% + 1.25 \times 70\%\\
+                   &= 1.775
+  \end{align*}
+
+  系统性能的提高程度：\[E_2 = \frac{\mathrm{CPI}_e}{\mathrm{CPI}_2} = 1.34\]
+
+  显然，第二种方案对系统性能提升更大。
+\end{solve}
+
+\section{Ex 2-14}
+
+模拟以下MIPS程序的单条指令运行方式，在表中用16进制编码记录每一步产生的结果。
+
+\begin{lstlisting}[language=,numbers=left]
+      .data
+n:    .word 3
+x:    .double 0.5 
+
+      .text
+      LD      R1, n(R0)
+      L.D     F0, x(R0)
+      DADDI   R2, R0, 1  ; %R2 $\leftarrow$ 1%
+      MTC1    R2, F11    ; %F11 $\leftarrow$ 1%
+      CVT.D.L F2, F11    ; %F2 $\leftarrow$ 1%
+loop: MUL.D   F2, F2, F0 ; %F2 $\leftarrow$ F2$\times$F0%
+      DADDI   R1, R1, -1 ; %decrement R1 by 1%
+      BNEZ    R1, loop   ; %if R1$\ne$0 continue%
+      HALT               ; %此条不填表%
+\end{lstlisting}
+
+\begin{solve}
+  \begin{center}
+  \begin{tabular}{cccccc}
+    \toprule
+    序号 & 寄存器 & 结果值(Hex) & 序号 & 寄存器 & 结果值(Hex)\\\midrule
+    1 & R1 & \texttt{0000000000000003} & 8 & n/a & n/a \\
+    2 & F0 & \texttt{3fe0000000000000} & 9 & F2 & \texttt{3fd0000000000000}\\
+    3 & R2 & \texttt{0000000000000001} & 10 & \textrm{R1} & \texttt{0000000000000001}\\
+    4 & F11 & \texttt{3ff0000000000000} & 11 & n/a & n/a \\
+    5 & F2 & \texttt{3ff0000000000000} & 12 & F2 & \texttt{3fc0000000000000}\\
+    6 & F2 & \texttt{3fe0000000000000} & 13 & R1 & \texttt{0000000000000000}\\
+    7 & R1 & \texttt{0000000000000002} & 14 & n/a & n/a \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+\end{solve}
+
+\section{Lab 1}
+
+用MIPS64指令编写一个尽可能短小的程序，将事先存放在数据区的4字节字符串
+（例如``3901''）转换为一个4位BCD整数，赋给R9。在WinMIPS64模拟器调试通
+过。
+
+\begin{solve}
+  \begin{enumerate}
+  \item 程序清单
+    \lstinputlisting{2-2.s}
+  \item 运行结果
+    
+    \begin{center}
+      \begin{tabular}{ccccc}
+        \toprule
+        循环轮数 & 1 & 2 & 3 & 4\\\midrule
+        R9的值(BCD) & \texttt{0003} & \texttt{0039} & \texttt{0390} & \texttt{3901}\\\bottomrule
+      \end{tabular}
+    \end{center}
+  \item 程序效率
+
+    \begin{center}
+      \begin{tabular}{cc}
+        \toprule
+        指令总条数（不算HALT） & 运行总时间（节拍数） \\\midrule
+        25 & 15\\\bottomrule
+      \end{tabular}
+    \end{center}
+
+  \end{enumerate}
+  
+\end{solve}
+
+\input{../footer}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
