@@ -1,0 +1,246 @@
+\newcommand{\doctitle}{计算机系统结构第四次作业}
+\input{../header.tex}
+
+\section{Ex 7.9}
+
+\begin{solve}
+  第一级cache不命中率
+  \[M_1 = \frac{110}{3000} \approx 3.7 \% ;\]
+
+  第二级cache不命中率
+  \[M_2 = \frac{55}{110} = 50 \% ;\]
+
+  全局cache不命中率
+  \[M_{\mathrm{global}} = M_1 \times M_2 \approx 1.83 \% \]
+\end{solve}
+
+\section{Ex 7.10}
+
+\begin{solve}
+  记时钟周期为$T_C$, 不命中开销为$T_{\mathrm{miss}}$, 程序指令数$IC$, 每条指令平均访
+  存数为$C_{\mathrm{Mem}}$, 不命中率为$r_{\mathrm{miss}}$
+
+  \paragraph{直接映射}
+  
+  平均访问时间
+  \begin{align*}
+    T_{\mathrm{access}} &= 1C + r_{\mathrm{miss}}T_{\mathrm{miss}} \\
+    &= 2 + 80 \times 0.014\\
+    &= 3.12 \mathrm{ns}
+  \end{align*}
+
+  CPU 时间
+  \begin{align*}
+    T_{\mathrm{CPU}} &= IC \times (CPI + C_{\mathrm{Mem}}
+    r_{\mathrm{miss}}
+    T_{\mathrm{miss}}) \times T_C\\
+    &= 2IC(2 + 1.2 \times 0.014 \times 80)\\
+    &= 6.688IC
+  \end{align*}
+  
+  \paragraph{2路组相联}
+  平均访问时间
+  \begin{align*}
+    T_{\mathrm{access}}' &= 1C + r_{\mathrm{miss}}'T_{\mathrm{miss}} \\
+    &= 2 + 80 \times 0.010\\
+    &= 2.8 \mathrm{ns}
+  \end{align*}
+
+  CPU 时间
+  \begin{align*}
+    T_{\mathrm{CPU}}' &= IC \times (CPI + C_{\mathrm{Mem}}
+    r_{\mathrm{miss}}'
+    T_{\mathrm{miss}}) \times T_C'\\
+    &= 2 \times 1.1 \times IC(2 + 1.2 \times 0.010 \times 80)\\
+    &= 6.512IC
+  \end{align*}
+\end{solve}
+
+\section{Ex 7.11}
+
+\begin{solve}
+  \begin{enumerate}
+  \item 平均访存时间
+    \begin{equation}
+      T_{\mathrm{access}} = T_{\mathrm{hit}} + T_{\mathrm{pseudo}}r_{\mathrm{pseudo}}
+      + T_{\mathrm{miss}}r_{\mathrm{miss}}
+    \end{equation}
+    其中, $r_{\mathrm{miss}}$为伪相联的不命中率, 即2路组相联的不命中率;
+    $T_{\mathrm{miss}}$ 为伪相联的不命中开销; $r_{\mathrm{pseudo}}$ 为
+    伪命中率,
+    \begin{align}
+      r_{\mathrm{pseudo}} &= r_{\mathrm{2hit}} - r_{\mathrm{1hit}} \\
+      &= r_{\mathrm{1miss}} - r_{\mathrm{2miss}}
+    \end{align}
+  \item 根据题目条件, 代入数据, 得到对2KB cache, 平均访存时间
+    \begin{align*}
+      T_{\mathrm{access}} = 4.822;
+    \end{align*}
+    对128KB cache, 平均访存时间
+    \begin{align*}
+      T_{\mathrm{access}} = 1.353.
+    \end{align*}
+
+  \end{enumerate}
+\end{solve}
+
+
+\section{Ex 7.12}
+
+\begin{solve}
+  记存储器带来的延迟为$t_m$, 则有实
+  际CPI
+  \begin{equation}
+    CPI = CPI_{\mathrm{exec}} + r_{\mathrm{miss}}t_m
+  \end{equation}
+  其中, $r_{\mathrm{miss}}$ 为发生cache不命中的概率.
+  
+  记取指停顿$t_I$, 取数据停顿$t_D$,
+  TLB停顿$t_{\mathrm{TLB}}$. 则有
+  \begin{equation}
+    t_m = t_I + r_{\mathrm{TLB}}t_{\mathrm{TLB}} + r_D(t_D  + r_{\mathrm{TLB}}t_{\mathrm{TLB}})
+  \end{equation}
+  其中, $r_D$为数据传送指令的比例.
+
+  记主存延迟为$t_0$, 取指操作为读内存操作, 访问数据操作可能读, 可能写.
+  当发生miss, 且miss的块为脏块时, 需要先将原先的块写回主存, 再调入新的
+  块. 故
+  \begin{equation}
+    t_I = t_D = t_0 + p + r_dp
+  \end{equation}
+  其中, $r_d$为脏块比例, $p$为从主存中传送一个块的时间, 且
+  \begin{equation}
+    p = \frac{32}{4} = 8
+  \end{equation}
+
+  由上述公式, 可得
+  \begin{equation}
+    CPI = CPI_{exec} + r_{\mathrm{miss}} (1+r_D)(t_0 + (1+r_d)p + r_{\mathrm{TLB}}t_{\mathrm{TLB}})
+  \end{equation}
+
+
+  \begin{enumerate}
+  \item 在理想TLB情况下, TLB失效的开销为0.
+
+    对16KB直接映像cache, 有
+    \begin{align*}
+      CPI_1 &= 1.5 + 0.029 (1+0.2) (40 + 8(1 + 0.5))\\
+      &= 3.3096
+    \end{align*}
+
+    对16KB 2路组相联混合cache, 有
+    \begin{align*}
+      CPI_2 &= 1.5 + 0.022 (1+0.2) (40 + 8(1 + 0.5))\\
+      &= 2.8728
+    \end{align*}
+
+    对32KB 直接映像相联混合cache, 有
+    \begin{align*}
+      CPI_3 &= 1.5 + 0.020 (1+0.2) (40 + 8(1 + 0.5))\\
+      &= 2.748
+    \end{align*}
+  \item 在实际TLB情况下, TLB失效的开销为20时钟周期.
+
+    对16KB直接映像cache, 有
+    \begin{align*}
+      CPI_1' &= 1.5 + 0.029 ((1+0.2) (40 + 8(1 + 0.5) + 0.002 \times 20)\\
+      &= 3.11
+    \end{align*}
+
+    对16KB 2路组相联混合cache, 有
+    \begin{align*}
+      CPI_2' &= 1.5 + 0.022 (1+0.2) (40 + 8(1 + 0.5) + 0.002 \times 20)\\
+      &= 2.874
+    \end{align*}
+
+    对32KB 直接映像相联混合cache, 有
+    \begin{align*}
+      CPI_3' &= 1.5 + 0.020 (1+0.2) (40 + 8(1 + 0.5) + 0.002 \times 20)\\
+      &= 2.748
+    \end{align*}
+\end{enumerate}
+\end{solve}
+
+\section{Ex 7.14}
+
+\begin{solve}
+  \begin{enumerate}
+  \item 对写直达cache, cache在任何时候都不应该有被修改过的块(即dirty
+    block), 这与题目给出的条件冲突. 在此, 按没有dirty block计算.
+
+    读命中
+    \begin{align*}
+      r_{\mathrm{hit}} &= 0.95 \times 0.75 \times 0\\
+      &= 0
+    \end{align*}
+
+
+    读不命中 
+    \begin{align*}
+      r_{\mathrm{miss}} &= 0.05 \times 0.75 \times 2\\
+      &= 0.075
+    \end{align*}
+    
+    写命中 
+    \begin{align*}
+      w_{\mathrm{hit}} &= 0.95 \times 0.25 \times 1\\
+      &= 0.2375
+    \end{align*}
+    
+    写不命中
+    \begin{align*}
+      w_{\mathrm{miss}} &= 0.05 \times 0.25 \times 3\\
+      &= 0.0375
+    \end{align*}
+
+    故带宽占用比例为
+    \begin{align*}
+      \eta &= r_{\mathrm{hit}} + r_{\mathrm{miss}} + w_{\mathrm{hit}}
+      + w_{\mathrm{miss}}\\
+      &= 0.35
+    \end{align*}
+  \item 对写回cache,
+
+    读命中
+    \begin{align*}
+      r_{\mathrm{hit}}' &= 0.95 \times 0.75 \times 0\\
+      &= 0
+    \end{align*}
+
+
+    读不命中 
+    \begin{align*}
+      r_{\mathrm{miss}}' &= 0.05 \times 0.75 \times (0.3 \times 2
+      \times 2 + 0.7 \times 2)\\
+      &= 0.0975
+    \end{align*}
+    
+    写命中 
+    \begin{align*}
+      w_{\mathrm{hit}} &= 0.95 \times 0.25 \times 0\\
+      &= 0
+    \end{align*}
+    
+    写不命中
+    \begin{align*}
+      w_{\mathrm{miss}} &= 0.05 \times 0.25 \times (0.3 \times 2
+      \times 2 + 0.7 \times 2)\\
+      &= 0.0325
+    \end{align*}
+
+    故带宽占用比例为
+    \begin{align*}
+      \eta &= r_{\mathrm{hit}} + r_{\mathrm{miss}} + w_{\mathrm{hit}}
+      + w_{\mathrm{miss}}\\
+      &= 0.13
+    \end{align*}
+
+  \end{enumerate}
+\end{solve}
+
+\input{../footer.tex}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
